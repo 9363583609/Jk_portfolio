@@ -44,12 +44,11 @@ export default function HeroPortrait({ src, alt }: { src: string; alt: string })
         style={reduceMotion ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
         className="glass-strong border-gradient relative aspect-square overflow-hidden rounded-[2rem] p-2 shadow-2xl"
       >
-        {/* scroll-triggered reveal: image wipes in bottom-up, with a scanning line sweep */}
+        {/* reveal: image wipes in on page load, with a scanning line sweep */}
         <motion.div
           initial={{ clipPath: "inset(100% 0 0 0)" }}
-          whileInView={{ clipPath: "inset(0% 0 0 0)" }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+          animate={{ clipPath: "inset(0% 0 0 0)" }}
+          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
           className="relative h-full w-full overflow-hidden rounded-[1.5rem]"
           style={{ transform: "translateZ(0px)" }}
         >
@@ -65,9 +64,8 @@ export default function HeroPortrait({ src, alt }: { src: string; alt: string })
           {!reduceMotion && (
             <motion.div
               initial={{ y: "-10%", opacity: 0.9 }}
-              whileInView={{ y: "120%", opacity: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+              animate={{ y: "120%", opacity: 0 }}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
               className="pointer-events-none absolute inset-x-0 h-1/4 bg-gradient-to-b from-transparent via-[var(--color-cyan-400)]/40 to-transparent"
               aria-hidden="true"
             />
