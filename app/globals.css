@@ -1,0 +1,209 @@
+@import "tailwindcss";
+
+@theme {
+  /* Display, body, mono font stacks are bound in layout.tsx via next/font CSS vars */
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Core palette */
+  --color-ink-950: #05050a;
+  --color-ink-900: #0a0a12;
+  --color-ink-800: #12121e;
+  --color-ink-700: #1b1b2c;
+  --color-ink-600: #262640;
+
+  --color-mist-50: #f7f8fc;
+  --color-mist-100: #eef0f9;
+  --color-mist-200: #dfe2f2;
+
+  --color-blue-500: #4c6fff;
+  --color-violet-500: #8b5cf6;
+  --color-cyan-400: #22d3ee;
+
+  --color-glass-dark: rgba(255, 255, 255, 0.07);
+  --color-glass-dark-strong: rgba(15, 16, 28, 0.82);
+  --color-glass-dark-border: rgba(255, 255, 255, 0.12);
+  --color-glass-light: rgba(255, 255, 255, 0.6);
+  --color-glass-light-strong: rgba(255, 255, 255, 0.88);
+  --color-glass-light-border: rgba(20, 20, 40, 0.1);
+}
+
+:root {
+  color-scheme: light;
+  --bg: var(--color-mist-50);
+  --bg-elevated: #ffffff;
+  --fg: #0b0b16;
+  --fg-muted: #4b4d63;
+  --glass: var(--color-glass-light);
+  --glass-strong: var(--color-glass-light-strong);
+  --glass-border: var(--color-glass-light-border);
+  --grid-line: rgba(20, 20, 40, 0.06);
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: var(--color-ink-900);
+  --bg-elevated: var(--color-ink-800);
+  --fg: #f3f4fb;
+  --fg-muted: #9a9cb8;
+  --glass: var(--color-glass-dark);
+  --glass-strong: var(--color-glass-dark-strong);
+  --glass-border: var(--color-glass-dark-border);
+  --grid-line: rgba(255, 255, 255, 0.05);
+}
+
+* {
+  border-color: var(--glass-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+}
+
+::selection {
+  background: var(--color-violet-500);
+  color: white;
+}
+
+/* Glass surface */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+.glass-strong {
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+}
+
+/* Gradient text / accents */
+.text-gradient {
+  background: linear-gradient(120deg, var(--color-blue-500), var(--color-violet-500) 50%, var(--color-cyan-400));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.border-gradient {
+  position: relative;
+}
+.border-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, var(--color-blue-500), var(--color-violet-500), var(--color-cyan-400));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Section eyebrow — signature monospace "code comment" label */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--color-cyan-400);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.eyebrow::before {
+  content: "//";
+  color: var(--fg-muted);
+}
+
+/* Background grid */
+.bg-grid {
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Custom cursor — spark trail */
+.cursor-spark-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+}
+.cursor-core {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-cyan-400);
+  box-shadow: 0 0 10px 2px rgba(34, 211, 238, 0.6);
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+}
+.cursor-core.cursor-core-active {
+  width: 14px;
+  height: 14px;
+  background: var(--color-violet-500);
+  box-shadow: 0 0 16px 4px rgba(139, 92, 246, 0.55);
+}
+
+@media (pointer: coarse) {
+  .cursor-spark-canvas,
+  .cursor-core {
+    display: none;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-violet-500) 40%, transparent);
+  border-radius: 8px;
+}
+
+/* Focus visibility for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-cyan-400);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
